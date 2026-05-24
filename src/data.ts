@@ -104,6 +104,19 @@ export const PLAYLIST: Song[] = [
     backgroundGradient: 'linear-gradient(135deg, #FAD961 0%, #F76B1C 100%)',
     accentColor: '#F76B1C',
     chordNotes: [311.13, 392.00, 466.16, 523.25, 587.33] // Ebmaj9
+  },
+  {
+    id: 'love-dialogue',
+    title: '爱的对白',
+    englishTitle: 'Love Dialogue',
+    album: '爱的对白',
+    year: 2026,
+    duration: '04:20',
+    description: '专辑同名主打，用绵密对唱与梦幻合成器织出爱情里那些低语与告白。歌词像两张纸条在夜色中交换，温柔又带着一点不安。',
+    vibeTags: ['对话情歌', '梦幻流行', '夜色轻语', '复古浪漫'],
+    backgroundGradient: 'linear-gradient(135deg, #D97706 0%, #EF4444 55%, #FECACA 100%)',
+    accentColor: '#D97706',
+    chordNotes: [261.63, 311.13, 392.00, 440.00, 523.25] // Cmaj7 add9
   }
 ];
 

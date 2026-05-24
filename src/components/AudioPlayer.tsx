@@ -8,9 +8,11 @@ import {
 } from 'lucide-react';
 
 const albumImg = "/src/assets/images/chairs_album_loner_1779628584848.png";
+const albumOptions = ['All Albums', ...Array.from(new Set(PLAYLIST.map((song) => song.album)))];
 
 export default function AudioPlayer() {
   const [currentSong, setCurrentSong] = useState<Song>(PLAYLIST[0]);
+  const [activeAlbum, setActiveAlbum] = useState<string>('All Albums');
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [volume, setVolume] = useState<number>(60);
   const [progress, setProgress] = useState<number>(32); // initial mock time
@@ -18,6 +20,9 @@ export default function AudioPlayer() {
   const [likedSongs, setLikedSongs] = useState<string[]>(['rollin-on']);
 
   const lyrics = LYRICS_DATABASE[currentSong.id] || [];
+  const visiblePlaylist = activeAlbum === 'All Albums'
+    ? PLAYLIST
+    : PLAYLIST.filter((song) => song.album === activeAlbum);
   const timerRef = useRef<any>(null);
 
   // When song changes, stop previous synthesizer sound, play new one, reset lyrics and reset timeline
@@ -50,15 +55,17 @@ export default function AudioPlayer() {
 
   // Next / Previous selectors
   const handleNext = () => {
-    const idx = PLAYLIST.findIndex(s => s.id === currentSong.id);
-    const nextIdx = (idx + 1) % PLAYLIST.length;
-    handleSelectSong(PLAYLIST[nextIdx]);
+    const list = visiblePlaylist.length > 0 ? visiblePlaylist : PLAYLIST;
+    const idx = list.findIndex(s => s.id === currentSong.id);
+    const nextIdx = idx === -1 ? 0 : (idx + 1) % list.length;
+    handleSelectSong(list[nextIdx]);
   };
 
   const handlePrev = () => {
-    const idx = PLAYLIST.findIndex(s => s.id === currentSong.id);
-    const prevIdx = (idx - 1 + PLAYLIST.length) % PLAYLIST.length;
-    handleSelectSong(PLAYLIST[prevIdx]);
+    const list = visiblePlaylist.length > 0 ? visiblePlaylist : PLAYLIST;
+    const idx = list.findIndex(s => s.id === currentSong.id);
+    const prevIdx = idx === -1 ? 0 : (idx - 1 + list.length) % list.length;
+    handleSelectSong(list[prevIdx]);
   };
 
   // Simulated player tick behavior (scrolling lyric lines and updating time)
@@ -213,9 +220,28 @@ export default function AudioPlayer() {
               </span>
             </div>
 
+            <div className="mb-4 flex flex-wrap gap-2 items-center">
+              {albumOptions.map((album) => {
+                const count = album === 'All Albums'
+                  ? PLAYLIST.length
+                  : PLAYLIST.filter((song) => song.album === album).length;
+                const isActive = album === activeAlbum;
+                return (
+                  <button
+                    key={album}
+                    type="button"
+                    onClick={() => setActiveAlbum(album)}
+                    className={`px-3 py-1.5 rounded-full text-[10px] font-semibold transition-all ${isActive ? 'bg-[#1A1A1A] text-white' : 'bg-[#F3F1ED] text-[#1A1A1A] hover:bg-[#E6E2DA]'}`}
+                  >
+                    {album === 'All Albums' ? '全部专辑' : album} ({count})
+                  </button>
+                );
+              })}
+            </div>
+
             {/* Audio Playlist List */}
             <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1 mb-5">
-              {PLAYLIST.map((song) => {
+              {visiblePlaylist.map((song) => {
                 const isActive = song.id === currentSong.id;
                 const isLiked = likedSongs.includes(song.id);
                 return (

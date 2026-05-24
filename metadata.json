@@ -1,0 +1,6 @@
+{
+  "name": "椅子乐团 The Chairs 音乐指南",
+  "description": "介绍台湾Indie-pop乐团“椅子乐团（The Chairs）”的代表性音乐风格、精选歌单和独家巡演动态，配合复古留声机电台与巡演地图体验。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
